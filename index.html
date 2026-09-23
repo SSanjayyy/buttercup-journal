@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buttercup Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gluten:wght@500;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF3B3; --bg-dot:#FFE98A; --card:#FFFCEB; --card-2:#FFF7D1;
+  --ink:#5A3A28; --ink-soft:#86644E; --line:#E9C77E;
+  --butter:#FFDE6B; --pumpkin:#EC9446; --leaf:#C4552F; --tulip:#F59BB5; --tulip-deep:#DB5F86;
+  --space:#34407A; --sky:#DCEBFF; --green:#6E9B5A;
+  --shadow:0 3px 0 rgba(150,105,40,.18), 0 10px 24px rgba(150,105,40,.12);
+  --display:"Gluten","Comic Sans MS","Chalkboard SE","Trebuchet MS",cursive;
+  --body:"Figtree","Avenir Next","Segoe UI",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1F2448; --bg-dot:#2A3160; --card:#2C3368; --card-2:#353D78;
+    --ink:#FFF0BF; --ink-soft:#D8C99B; --line:#4C5594;
+    --butter:#F5D466; --sky:#3A4A86;
+    --shadow:0 3px 0 rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1F2448; --bg-dot:#2A3160; --card:#2C3368; --card-2:#353D78;
+  --ink:#FFF0BF; --ink-soft:#D8C99B; --line:#4C5594;
+  --butter:#F5D466; --sky:#3A4A86;
+  --shadow:0 3px 0 rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0; min-height:100%;
+  font-family:var(--body); font-size:17px; line-height:1.5; color:var(--ink);
+  background-color:var(--bg);
+  background-image:radial-gradient(var(--bg-dot) 2.2px, transparent 2.6px);
+  background-size:26px 26px;
+  padding-bottom:calc(92px + env(safe-area-inset-bottom,0px));
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--tulip-deep);outline-offset:2px;border-radius:10px}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+
+/* textures & decoration */
+.grain{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50;opacity:.28;mix-blend-mode:multiply}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .grain{mix-blend-mode:screen;opacity:.12}}
+.leaves{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.leaves svg{position:absolute;top:-60px;width:34px;height:34px;opacity:.55;animation:fall linear infinite}
+@keyframes fall{
+  0%{transform:translate(0,-10vh) rotate(0)}
+  50%{transform:translate(40px,50vh) rotate(160deg)}
+  100%{transform:translate(-20px,112vh) rotate(340deg)}
+}
+.sticker{
+  display:block;
+  filter:drop-shadow(2.5px 0 0 #fff) drop-shadow(-2.5px 0 0 #fff) drop-shadow(0 2.5px 0 #fff) drop-shadow(0 -2.5px 0 #fff) drop-shadow(0 4px 5px rgba(90,58,40,.25));
+}
+.decor{position:fixed;inset:0;pointer-events:none;z-index:0;display:none}
+.decor .sticker{position:absolute}
+@media (min-width:980px){.decor{display:block}}
+
+.app{position:relative;z-index:1;max-width:620px;margin:0 auto;padding:18px 16px 0}
+
+/* header */
+.top{margin-bottom:18px}
+.hello-row{display:flex;align-items:center;gap:12px}
+.hero-kitty{width:78px;height:78px;flex:none;transform:rotate(-6deg)}
+.hello-text{flex:1;min-width:0}
+h1{font-family:var(--display);font-weight:700;font-size:2.35rem;line-height:1.05;margin:0;letter-spacing:.2px}
+.daily{margin:4px 0 0;color:var(--ink-soft);font-size:.98rem}
+.icon-btn{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--card);display:grid;place-items:center;flex:none}
+.icon-btn svg{width:24px;height:24px}
+.datebar{display:flex;align-items:center;gap:8px;margin-top:16px}
+.datebar .arrow{width:44px;height:44px;border-radius:14px;border:2px solid var(--line);background:var(--card);font-size:1.4rem;line-height:1;flex:none}
+.date-label{flex:1;height:44px;border-radius:14px;border:2px dashed var(--line);background:var(--card-2);font-weight:600;padding:0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.today-chip{margin-top:10px;border:0;background:var(--tulip);color:#4a2130;border-radius:999px;padding:6px 14px;font-weight:600;font-size:.9rem}
+
+/* cards */
+.card{position:relative;background:var(--card);border-radius:24px;padding:22px 20px 20px;margin:0 0 22px;box-shadow:var(--shadow)}
+.card::before{content:"";position:absolute;inset:6px;border:2px dashed var(--line);border-radius:19px;pointer-events:none;filter:url(#wobble)}
+.card > *{position:relative}
+.card-sticker{position:absolute!important;top:-24px;right:-8px;width:64px;height:64px;transform:rotate(10deg);z-index:2}
+h2{font-family:var(--display);font-weight:700;font-size:1.5rem;line-height:1.15;margin:0 0 12px;padding-right:48px}
+h3{font-family:var(--display);font-weight:500;font-size:1.15rem;margin:18px 0 8px}
+.hint{color:var(--ink-soft);font-size:.92rem;margin:6px 0 0}
+
+textarea,input[type=text],input[type=number],select{
+  width:100%;border:2px solid var(--line);border-radius:16px;background:var(--card-2);
+  padding:12px 14px;outline:none;transition:border-color .15s
+}
+textarea{resize:vertical;min-height:170px;line-height:1.6;
+  background-image:repeating-linear-gradient(transparent 0 26.6px, color-mix(in srgb,var(--line) 55%,transparent) 26.6px 27.6px);
+  background-attachment:local;background-position:0 11px}
+textarea:focus,input:focus,select:focus{border-color:var(--pumpkin)}
+.saved{font-size:.85rem;color:var(--ink-soft);min-height:1.3em;margin:6px 2px 0}
+
+.btn{border:0;border-radius:14px;padding:11px 16px;font-weight:700;background:var(--pumpkin);color:#fff;box-shadow:0 3px 0 #b86a2a}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #b86a2a}
+.btn.soft{background:var(--butter);color:#5A3A28;box-shadow:0 3px 0 #d0ab3a}
+.btn.pink{background:var(--tulip);color:#4a2130;box-shadow:0 3px 0 #c9728c}
+.btn:disabled{opacity:.6}
+.linkish{border:0;background:none;color:var(--tulip-deep);font-weight:600;text-decoration:underline;padding:4px 0}
+
+/* calories */
+.cal-block{display:flex;gap:16px;align-items:center;background:var(--card-2);border-radius:18px;padding:14px;margin-bottom:14px}
+.ring{width:108px;height:108px;flex:none}
+.ring .track{stroke:var(--line)}
+.ring .fill{stroke:var(--pumpkin);transition:stroke-dashoffset .6s ease}
+.ring text{fill:var(--ink);font-family:var(--display)}
+.cal-info{flex:1;min-width:0}
+.cal-msg{font-weight:600;margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 10px;font-size:.88rem;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--butter);border-color:var(--pumpkin);color:#5A3A28}
+body.cal-off .cal-only{display:none!important}
+
+.meals{list-style:none;margin:0 0 12px;padding:0}
+.meal{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:2px dotted var(--line)}
+.meal:last-child{border-bottom:0}
+.tag{font-size:.78rem;font-weight:700;border-radius:999px;padding:3px 9px;background:var(--sky);color:var(--ink);flex:none}
+.tag.Breakfast{background:#FFE3A3;color:#5A3A28}.tag.Lunch{background:#FFD0B5;color:#5A3A28}
+.tag.Dinner{background:#F9C6D5;color:#4a2130}.tag.Snack{background:#D8EFC9;color:#2f4a24}
+.meal-text{flex:1;min-width:0;overflow-wrap:anywhere}
+.meal-cal{font-weight:700;color:var(--pumpkin);white-space:nowrap}
+.del{border:0;background:none;width:34px;height:34px;border-radius:50%;color:var(--ink-soft);font-size:1.2rem}
+.del:hover{background:var(--card-2)}
+.empty{color:var(--ink-soft);padding:6px 0 10px}
+
+.meal-form{display:grid;gap:10px;background:var(--card-2);padding:14px;border-radius:18px}
+.meal-form .row{display:flex;gap:8px;align-items:stretch}
+.meal-form select{width:auto;flex:none}
+.meal-form input[type=number]{max-width:130px}
+.guess-note{font-size:.9rem;color:var(--ink-soft);margin:0;min-height:1.2em}
+
+/* mood */
+.faces{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 16px}
+.face-btn{border:2px solid transparent;background:var(--card-2);border-radius:20px;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.85rem;font-weight:600;transition:transform .15s}
+.face-btn svg{width:56px;height:56px}
+.face-btn[aria-pressed="true"]{border-color:var(--pumpkin);background:var(--butter);color:#5A3A28;transform:translateY(-3px) rotate(-3deg)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.week button{border:0;background:var(--card-2);border-radius:14px;padding:8px 0 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.78rem;font-weight:600}
+.week button.sel{outline:2px solid var(--pumpkin)}
+.week svg,.week .dot-empty{width:30px;height:30px}
+.dot-empty{border:2px dashed var(--line);border-radius:50%}
+
+/* days */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head h2{margin:0;padding:0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.dow{text-align:center;font-size:.78rem;color:var(--ink-soft);font-weight:600}
+.cal-day{aspect-ratio:1;border:0;background:var(--card-2);border-radius:12px;position:relative;font-weight:600;font-size:.85rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px}
+.cal-day svg{width:22px;height:22px}
+.cal-day .pip{width:7px;height:7px;border-radius:50%;background:var(--tulip-deep)}
+.cal-day.is-today{box-shadow:inset 0 0 0 2px var(--pumpkin)}
+.cal-day.is-sel{background:var(--butter);color:#5A3A28}
+.recent{list-style:none;margin:0;padding:0}
+.recent button{width:100%;text-align:left;border:0;background:none;display:flex;gap:12px;align-items:flex-start;padding:10px 4px;border-bottom:2px dotted var(--line)}
+.recent svg{width:34px;height:34px;flex:none}
+.recent .when{font-weight:700;display:block}
+.recent .snip{color:var(--ink-soft);font-size:.92rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* checklist */
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--card-2);border-radius:16px;padding:4px;margin-bottom:14px}
+.seg button{border:0;background:none;border-radius:12px;padding:9px 4px;font-weight:700;font-size:.92rem;color:var(--ink-soft)}
+.seg button[aria-pressed="true"]{background:var(--butter);color:#5A3A28;box-shadow:0 2px 0 #d0ab3a}
+.progress{height:12px;border-radius:999px;background:var(--card-2);overflow:hidden;margin:4px 0 6px;border:2px solid var(--line)}
+.progress span{display:block;height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--tulip) 0 8px,#F7B3C7 8px 16px);transition:width .4s ease}
+.tasks{list-style:none;margin:10px 0 12px;padding:0}
+.task{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:2px dotted var(--line)}
+.task:last-child{border-bottom:0}
+.task label{flex:1;display:flex;align-items:center;gap:12px;cursor:pointer;min-width:0;overflow-wrap:anywhere}
+.task input{appearance:none;width:28px;height:28px;flex:none;border:2.5px solid var(--pumpkin);border-radius:9px;background:var(--card);display:grid;place-items:center;transition:background .15s}
+.task input:checked{background:var(--pumpkin)}
+.task input:checked::after{content:"";width:12px;height:7px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:translateY(-2px) rotate(-45deg)}
+.task input:checked + span{text-decoration:line-through;text-decoration-color:var(--tulip-deep);text-decoration-thickness:2px;color:var(--ink-soft)}
+.add-row{display:flex;gap:8px}
+.add-row input{flex:1}
+.list-sub{color:var(--ink-soft);font-size:.92rem;margin:-6px 0 8px}
+
+/* cheer */
+.cheer-card{text-align:center;padding:30px 22px 26px;background:
+  radial-gradient(circle at 20% 15%, rgba(255,255,255,.55) 0 2px, transparent 3px),
+  radial-gradient(circle at 80% 30%, rgba(255,255,255,.55) 0 1.5px, transparent 3px),
+  radial-gradient(circle at 65% 80%, rgba(255,255,255,.5) 0 2px, transparent 3px),
+  linear-gradient(160deg,#3A4788,#2A3264);color:#FFF3C4}
+.cheer-card::before{border-color:rgba(255,222,107,.45)}
+.cheer-stickers{position:relative;height:150px;margin-bottom:8px}
+.cheer-stickers .sticker{position:absolute}
+.cheer-text{font-family:var(--display);font-weight:700;font-size:1.9rem;line-height:1.2;margin:4px auto 20px;max-width:18ch;min-height:2.4em}
+.cheer-text.pop{animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+.twinkle{animation:tw 2.8s ease-in-out infinite}
+@keyframes tw{50%{opacity:.35}}
+
+/* tabs */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));
+  background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);
+  border-top:2px dashed var(--line)}
+.tabs-inner{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;width:100%;max-width:620px}
+.tab{border:0;background:none;border-radius:16px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.8rem;font-weight:600;color:var(--ink-soft)}
+.tab svg{width:27px;height:27px}
+@media (max-width:360px){.tab{font-size:.72rem}}
+.tab[aria-selected="true"]{background:var(--butter);color:#5A3A28}
+
+/* settings */
+dialog{border:0;border-radius:24px;padding:0;max-width:min(460px,calc(100% - 28px));width:100%;background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(60,40,20,.35)}
+.dlg{padding:22px 20px 20px;max-height:80vh;overflow:auto}
+.field{margin-bottom:16px}
+.field > label,.field > .lbl{display:block;font-weight:700;margin-bottom:6px}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card-2);border-radius:16px;padding:12px 14px}
+.switch input{width:52px;height:30px;appearance:none;border-radius:999px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked{background:var(--pumpkin)}
+.switch input:checked::after{transform:translateX(22px)}
+.backup textarea{min-height:80px;font-size:.8rem;background-image:none;word-break:break-all}
+.dlg-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+#toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);
+  background:var(--space);color:#FFF3C4;padding:10px 18px;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:420px){
+  h1{font-size:2rem}
+  .hero-kitty{width:64px;height:64px}
+  .cal-block{flex-direction:column;align-items:flex-start}
+  .face-btn svg{width:46px;height:46px}
+  .cheer-text{font-size:1.6rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .leaves{display:none}
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 .45  0 0 0 0 .3  0 0 0 0 .15  0 0 0 .55 0"/>
+  </filter>
+  <filter id="wobble">
+    <feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" scale="5"/>
+  </filter>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="2.5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="warm">
+    <feColorMatrix type="matrix" values="1.05 .05 0 0 0  0 1 0 0 0  0 0 .88 0 0  0 0 0 1 0"/>
+  </filter>
+
+  <!-- original kitty with a tulip -->
+  <symbol id="s-kitty" viewBox="0 0 120 110">
+    <g stroke="#5A3A28" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M22 46 L25 12 L52 30 Z" fill="#EC9446"/>
+      <path d="M98 46 L95 12 L68 30 Z" fill="#FFF8EA"/>
+      <path d="M29 36 L30 22 L42 30 Z" fill="#F59BB5" stroke="none"/>
+      <path d="M91 36 L90 22 L78 30 Z" fill="#F59BB5" stroke="none"/>
+      <ellipse cx="60" cy="64" rx="45" ry="37" fill="#FFF8EA"/>
+      <path d="M52 30 q2 7 0 12 M60 28 v14 M68 30 q-2 7 0 12" stroke="#EC9446" stroke-width="4.5" fill="none"/>
+      <path d="M17 70 L32 71 M18 79 L32 77 M103 70 L88 71 M102 79 L88 77" fill="none" stroke-width="2.2"/>
+      <path d="M60 76 q-4 6 -9 2 M60 76 q4 6 9 2" fill="none" stroke-width="2.6"/>
+    </g>
+    <ellipse cx="42" cy="63" rx="5" ry="6.5" fill="#5A3A28"/>
+    <ellipse cx="78" cy="63" rx="5" ry="6.5" fill="#5A3A28"/>
+    <circle cx="44" cy="60.5" r="1.8" fill="#fff"/><circle cx="80" cy="60.5" r="1.8" fill="#fff"/>
+    <circle cx="31" cy="77" r="6.5" fill="#F59BB5" opacity=".75"/><circle cx="89" cy="77" r="6.5" fill="#F59BB5" opacity=".75"/>
+    <path d="M55.5 71 h9 l-4.5 4.5 z" fill="#DB5F86"/>
+    <g transform="translate(84 -2) rotate(18)">
+      <path d="M12 20 v16" stroke="#6E9B5A" stroke-width="3" stroke-linecap="round"/>
+      <path d="M2 4 L6 11 L12 0 L18 11 L22 4 C23 16 19 22 12 22 C5 22 1 16 2 4 Z" fill="#F59BB5" stroke="#5A3A28" stroke-width="2.2" stroke-linejoin="round"/>
+    </g>
+  </symbol>
+
+  <symbol id="s-astro" viewBox="0 0 120 124">
+    <path d="M18 104 q42 26 84 0 v20 h-84 z" fill="#FFFFFF" stroke="#5A3A28" stroke-width="3" stroke-linejoin="round"/>
+    <circle cx="60" cy="102" r="5" fill="#DB5F86"/>
+    <circle cx="60" cy="58" r="54" fill="#DCEBFF" stroke="#5A3A28" stroke-width="3"/>
+    <use href="#s-kitty" x="12" y="14" width="96" height="88"/>
+    <path d="M24 34 q10 -18 30 -22" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".8"/>
+    <circle cx="60" cy="58" r="54" fill="none" stroke="#34407A" stroke-width="5" opacity=".25"/>
+  </symbol>
+
+  <symbol id="s-tulip" viewBox="0 0 60 100">
+    <path d="M30 46 V96" stroke="#6E9B5A" stroke-width="5" stroke-linecap="round"/>
+    <path d="M30 84 q-20 -6 -22 -30 q16 6 22 24 z" fill="#8DBB6E" stroke="#5A3A28" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M30 76 q16 -4 20 -24 q-14 4 -20 18 z" fill="#8DBB6E" stroke="#5A3A28" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M12 16 L19 30 L30 10 L41 30 L48 16 C51 40 44 50 30 50 C16 50 9 40 12 16 Z" fill="#F59BB5" stroke="#5A3A28" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M22 36 q2 8 8 10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
+  </symbol>
+  <symbol id="s-tulip-y" viewBox="0 0 60 100">
+    <path d="M30 46 V96" stroke="#6E9B5A" stroke-width="5" stroke-linecap="round"/>
+    <path d="M30 84 q-20 -6 -22 -30 q16 6 22 24 z" fill="#8DBB6E" stroke="#5A3A28" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M12 16 L19 30 L30 10 L41 30 L48 16 C51 40 44 50 30 50 C16 50 9 40 12 16 Z" fill="#FFD95A" stroke="#5A3A28" stroke-width="3" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="s-leaf" viewBox="0 0 100 100">
+    <path d="M50 6 L58 30 L74 20 L70 42 L92 40 L78 56 L86 64 L60 66 L62 86 L50 77 L38 86 L40 66 L14 64 L22 56 L8 40 L30 42 L26 20 L42 30 Z" fill="#E0703A" stroke="#8A3A1C" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M50 20 V96 M50 50 L70 38 M50 50 L30 38" stroke="#8A3A1C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="s-leaf-y" viewBox="0 0 100 100">
+    <path d="M50 6 L58 30 L74 20 L70 42 L92 40 L78 56 L86 64 L60 66 L62 86 L50 77 L38 86 L40 66 L14 64 L22 56 L8 40 L30 42 L26 20 L42 30 Z" fill="#F2B544" stroke="#9A6A14" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M50 20 V96" stroke="#9A6A14" stroke-width="2.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="s-acorn" viewBox="0 0 80 100">
+    <path d="M40 8 q4 -6 10 -4" stroke="#6B4424" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="40" cy="62" rx="24" ry="30" fill="#D9954F" stroke="#5A3A28" stroke-width="3"/>
+    <path d="M12 36 q28 -34 56 0 q-28 12 -56 0 z" fill="#8B5A2E" stroke="#5A3A28" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M24 30 l6 4 M36 26 l4 5 M48 26 l-2 6 M58 30 l-5 4" stroke="#5A3A28" stroke-width="2" stroke-linecap="round"/>
+    <path d="M30 60 q2 14 10 20" stroke="#fff" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="s-pumpkin" viewBox="0 0 110 90">
+    <path d="M55 22 q-2 -12 8 -18" stroke="#5E7F3E" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M62 10 q14 -6 20 4 q-12 4 -20 -4z" fill="#8DBB6E" stroke="#5A3A28" stroke-width="2"/>
+    <ellipse cx="32" cy="55" rx="26" ry="30" fill="#EC9446" stroke="#5A3A28" stroke-width="3"/>
+    <ellipse cx="78" cy="55" rx="26" ry="30" fill="#EC9446" stroke="#5A3A28" stroke-width="3"/>
+    <ellipse cx="55" cy="55" rx="24" ry="32" fill="#F4A65A" stroke="#5A3A28" stroke-width="3"/>
+    <path d="M48 40 q-3 16 0 30" stroke="#fff" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="s-planet" viewBox="0 0 120 90">
+    <circle cx="60" cy="45" r="30" fill="#F59BB5" stroke="#5A3A28" stroke-width="3"/>
+    <path d="M40 34 q14 -6 30 2 M36 50 q20 -4 46 4" stroke="#DB5F86" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="60" cy="50" rx="56" ry="13" fill="none" stroke="#FFD95A" stroke-width="6" transform="rotate(-14 60 50)"/>
+    <ellipse cx="60" cy="50" rx="56" ry="13" fill="none" stroke="#5A3A28" stroke-width="2" transform="rotate(-14 60 50)"/>
+    <path d="M30 45 a30 30 0 0 0 60 0" fill="none"/>
+  </symbol>
+  <symbol id="s-star" viewBox="0 0 50 50">
+    <path d="M25 3 L31 18 L47 19 L34 29 L39 45 L25 36 L11 45 L16 29 L3 19 L19 18 Z" fill="#FFD95A" stroke="#5A3A28" stroke-width="2.5" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="s-rocket" viewBox="0 0 80 120">
+    <path d="M30 92 q10 26 20 0 z" fill="#FFB347"/>
+    <path d="M34 92 q6 14 12 0 z" fill="#FFE27A"/>
+    <path d="M40 6 C60 24 62 60 54 92 H26 C18 60 20 24 40 6 Z" fill="#FFFFFF" stroke="#5A3A28" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M26 70 L10 92 L27 90 Z M54 70 L70 92 L53 90 Z" fill="#DB5F86" stroke="#5A3A28" stroke-width="3" stroke-linejoin="round"/>
+    <circle cx="40" cy="46" r="10" fill="#DCEBFF" stroke="#5A3A28" stroke-width="3"/>
+    <path d="M32 22 q8 -8 16 0" stroke="#F59BB5" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="s-vinyl" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="46" fill="#2B2230" stroke="#5A3A28" stroke-width="3"/>
+    <circle cx="50" cy="50" r="38" fill="none" stroke="#4A3D52" stroke-width="1.5"/>
+    <circle cx="50" cy="50" r="31" fill="none" stroke="#4A3D52" stroke-width="1.5"/>
+    <circle cx="50" cy="50" r="17" fill="#E0667F"/>
+    <path d="M50 57 C42 51 42 44 46.5 43 C48.5 42.6 50 44.5 50 44.5 C50 44.5 51.5 42.6 53.5 43 C58 44 58 51 50 57 Z" fill="#FFE3EA"/>
+    <path d="M20 30 q12 -18 30 -20" stroke="#fff" stroke-width="3" fill="none" opacity=".35" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="s-note" viewBox="0 0 40 50">
+    <path d="M14 38 V8 L34 3 V32" stroke="#DB5F86" stroke-width="4" fill="none" stroke-linejoin="round"/>
+    <ellipse cx="9" cy="39" rx="7" ry="5.5" fill="#DB5F86"/><ellipse cx="29" cy="33" rx="7" ry="5.5" fill="#DB5F86"/>
+  </symbol>
+
+  <!-- mood faces -->
+  <symbol id="f-super" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="44" fill="#FFD95A" stroke="#5A3A28" stroke-width="3.5"/>
+    <path d="M28 42 q8 -11 16 0 M56 42 q8 -11 16 0" stroke="#5A3A28" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M27 55 h46 q-3 27 -23 27 q-20 0 -23 -27 z" fill="#5A3A28"/>
+    <path d="M38 73 q12 -8 24 0 q-4 9 -12 9 q-8 0 -12 -9z" fill="#F59BB5"/>
+    <circle cx="23" cy="58" r="6" fill="#F59BB5" opacity=".8"/><circle cx="77" cy="58" r="6" fill="#F59BB5" opacity=".8"/>
+  </symbol>
+  <symbol id="f-happy" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="44" fill="#FFE27A" stroke="#5A3A28" stroke-width="3.5"/>
+    <circle cx="36" cy="42" r="5" fill="#5A3A28"/><circle cx="64" cy="42" r="5" fill="#5A3A28"/>
+    <path d="M32 60 q18 17 36 0" stroke="#5A3A28" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <circle cx="25" cy="57" r="5" fill="#F59BB5" opacity=".7"/><circle cx="75" cy="57" r="5" fill="#F59BB5" opacity=".7"/>
+  </symbol>
+  <symbol id="f-mid" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="44" fill="#F3E6B0" stroke="#5A3A28" stroke-width="3.5"/>
+    <circle cx="36" cy="44" r="5" fill="#5A3A28"/><circle cx="64" cy="44" r="5" fill="#5A3A28"/>
+    <path d="M35 65 h30" stroke="#5A3A28" stroke-width="4.5" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="f-sad" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="44" fill="#CFE0F5" stroke="#5A3A28" stroke-width="3.5"/>
+    <path d="M28 38 q6 -5 13 -3 M72 38 q-6 -5 -13 -3" stroke="#5A3A28" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <circle cx="36" cy="48" r="5" fill="#5A3A28"/><circle cx="64" cy="48" r="5" fill="#5A3A28"/>
+    <path d="M33 72 q17 -14 34 0" stroke="#5A3A28" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    <path d="M70 55 q-6 9 0 12 q6 -3 0 -12z" fill="#7FB7F0" stroke="#5A3A28" stroke-width="1.5"/>
+  </symbol>
+
+  <!-- icons (currentColor) -->
+  <symbol id="i-book" viewBox="0 0 32 32"><path d="M5 6 q6 -2 11 2 q5 -4 11 -2 v19 q-6 -2 -11 2 q-5 -4 -11 -2 z M16 8 v19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></symbol>
+  <symbol id="i-mood" viewBox="0 0 32 32"><circle cx="16" cy="16" r="11.5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="13.5" r="1.8" fill="currentColor"/><circle cx="20" cy="13.5" r="1.8" fill="currentColor"/><path d="M11 19 q5 5 10 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="20" rx="5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M5 13 h22 M11 4 v5 M21 4 v5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="20" r="2.4" fill="currentColor"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 32 32"><path d="M16 27 C6 20 3 14 6 9 C8.5 5 13.5 5.5 16 9.5 C18.5 5.5 23.5 5 26 9 C29 14 26 20 16 27 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 32 32"><rect x="5" y="5" width="22" height="22" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M10.5 16.5 l4 4 l7 -9" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 32 32"><circle cx="16" cy="16" r="4.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M16 3 v4 M16 25 v4 M3 16 h4 M25 16 h4 M6.8 6.8 l2.8 2.8 M22.4 22.4 l2.8 2.8 M6.8 25.2 l2.8 -2.8 M22.4 9.6 l2.8 -2.8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+</defs>
+</svg>
+
+<svg class="grain" aria-hidden="true" focusable="false"><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+<div class="leaves" id="leaves" aria-hidden="true"></div>
+
+<div class="decor" aria-hidden="true">
+  <svg class="sticker" style="top:9%;left:4%;width:120px;height:92px;transform:rotate(-10deg)"><use href="#s-planet"/></svg>
+  <svg class="sticker" style="top:6%;right:6%;width:74px;height:110px;transform:rotate(22deg)"><use href="#s-rocket"/></svg>
+  <svg class="sticker" style="top:38%;right:5%;width:96px;height:96px;transform:rotate(-12deg)"><use href="#s-vinyl"/></svg>
+  <svg class="sticker" style="top:34%;right:13%;width:30px;height:38px;transform:rotate(-8deg)"><use href="#s-note"/></svg>
+  <svg class="sticker" style="top:44%;left:6%;width:110px;height:100px;transform:rotate(8deg)"><use href="#s-kitty"/></svg>
+  <svg class="sticker" style="bottom:14%;left:3%;width:56px;height:94px;transform:rotate(-8deg)"><use href="#s-tulip"/></svg>
+  <svg class="sticker" style="bottom:12%;left:8%;width:52px;height:88px;transform:rotate(9deg)"><use href="#s-tulip-y"/></svg>
+  <svg class="sticker" style="bottom:15%;left:12.5%;width:50px;height:84px;transform:rotate(-3deg)"><use href="#s-tulip"/></svg>
+  <svg class="sticker" style="bottom:14%;right:5%;width:120px;height:98px;transform:rotate(-5deg)" filter="url(#warm)"><use href="#s-pumpkin"/></svg>
+  <svg class="sticker" style="bottom:28%;right:14%;width:46px;height:58px;transform:rotate(18deg)"><use href="#s-acorn"/></svg>
+  <svg style="position:absolute;top:26%;left:14%;width:22px;height:22px" filter="url(#glow)" class="twinkle"><use href="#s-star"/></svg>
+  <svg style="position:absolute;top:22%;right:15%;width:18px;height:18px;animation-delay:1s" filter="url(#glow)" class="twinkle"><use href="#s-star"/></svg>
+</div>
+
+<div class="app">
+  <header class="top">
+    <div class="hello-row">
+      <svg class="sticker hero-kitty" viewBox="0 0 120 124" aria-hidden="true"><use href="#s-astro"/></svg>
+      <div class="hello-text">
+        <h1 id="hello">Hi, cutie</h1>
+        <p class="daily" id="dailyCheer"></p>
+      </div>
+      <button class="icon-btn" id="settingsBtn" aria-label="Settings"><svg aria-hidden="true"><use href="#i-gear"/></svg></button>
+    </div>
+    <nav class="datebar" aria-label="Choose a day">
+      <button class="arrow" id="prevDay" aria-label="Previous day">‹</button>
+      <button class="date-label" id="dateLabel" aria-label="Open calendar"></button>
+      <button class="arrow" id="nextDay" aria-label="Next day">›</button>
+    </nav>
+    <button class="today-chip" id="todayBtn" hidden>Back to today</button>
+  </header>
+
+  <main>
+    <!-- JOURNAL + FOOD -->
+    <section class="panel" id="panel-journal" aria-labelledby="journalTitle">
+      <article class="card">
+        <svg class="sticker card-sticker" viewBox="0 0 60 100" aria-hidden="true" style="width:46px;height:76px;top:-30px"><use href="#s-tulip"/></svg>
+        <h2 id="journalTitle">How was today?</h2>
+        <label for="journal" class="sr-only">Journal entry</label>
+        <textarea id="journal" placeholder="What happened today? What made you smile? What felt good to eat?"></textarea>
+        <p class="saved" id="journalSaved" aria-live="polite"></p>
+      </article>
+
+      <article class="card">
+        <svg class="sticker card-sticker" viewBox="0 0 110 90" aria-hidden="true" style="width:70px;height:58px"><use href="#s-pumpkin"/></svg>
+        <h2>What you ate</h2>
+
+        <div class="cal-block cal-only">
+          <svg class="ring" viewBox="0 0 120 120" role="img" aria-labelledby="ringLabel">
+            <title id="ringLabel">Calories so far</title>
+            <circle class="track" cx="60" cy="60" r="50" fill="none" stroke-width="12"/>
+            <circle class="fill" id="ringFill" cx="60" cy="60" r="50" fill="none" stroke-width="12" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+            <text x="60" y="60" text-anchor="middle" font-size="26" font-weight="700" id="calTotal">0</text>
+            <text x="60" y="80" text-anchor="middle" font-size="13" id="calGoalTxt">of 1400</text>
+          </svg>
+          <div class="cal-info">
+            <p class="cal-msg" id="calMsg"></p>
+            <div class="chips" role="group" aria-label="Today's calorie goal">
+              <button class="chip" data-goal="1300">1300</button>
+              <button class="chip" data-goal="1400">1400</button>
+              <button class="chip" data-goal="1500">1500</button>
+              <button class="chip" data-goal="1600">1600</button>
+            </div>
+          </div>
+        </div>
+
+        <ul class="meals" id="meals"></ul>
+
+        <form class="meal-form" id="mealForm" autocomplete="off">
+          <div class="row">
+            <label for="mealType" class="sr-only">Meal</label>
+            <select id="mealType">
+              <option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option>
+            </select>
+            <label for="mealText" class="sr-only">What did you eat?</label>
+            <input type="text" id="mealText" placeholder="2 pupusas and curtido">
+          </div>
+          <div class="row cal-only">
+            <label for="mealCal" class="sr-only">Calories</label>
+            <input type="number" id="mealCal" inputmode="numeric" min="0" max="5000" placeholder="Calories">
+            <button type="button" class="btn soft" id="guessBtn">Best guess</button>
+          </div>
+          <p class="guess-note cal-only" id="guessNote"></p>
+          <button type="submit" class="btn">Add meal</button>
+        </form>
+        <p class="hint cal-only">Leave calories blank and I'll make a best guess for you.</p>
+      </article>
+    </section>
+
+    <!-- MOOD -->
+    <section class="panel" id="panel-mood" hidden aria-labelledby="moodTitle">
+      <article class="card">
+        <svg class="sticker card-sticker" viewBox="0 0 100 100" aria-hidden="true"><use href="#s-vinyl"/></svg>
+        <h2 id="moodTitle">How's your heart today?</h2>
+        <div class="faces" role="group" aria-label="Rate your day">
+          <button class="face-btn" data-mood="super" aria-pressed="false"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#f-super"/></svg>So happy</button>
+          <button class="face-btn" data-mood="happy" aria-pressed="false"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#f-happy"/></svg>Happy</button>
+          <button class="face-btn" data-mood="mid" aria-pressed="false"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#f-mid"/></svg>Mid</button>
+          <button class="face-btn" data-mood="sad" aria-pressed="false"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#f-sad"/></svg>Sad</button>
+        </div>
+        <label for="thoughts" class="sr-only">Thoughts</label>
+        <textarea id="thoughts" placeholder="Whatever's on your mind. It's just for you."></textarea>
+        <p class="saved" id="thoughtsSaved" aria-live="polite"></p>
+      </article>
+      <article class="card">
+        <h2>Your week</h2>
+        <div class="week" id="week"></div>
+      </article>
+    </section>
+
+    <!-- CHECKLIST -->
+    <section class="panel" id="panel-list" hidden aria-labelledby="listTitle">
+      <article class="card">
+        <svg class="sticker card-sticker" viewBox="0 0 120 124" aria-hidden="true" style="width:62px;height:64px;top:-30px"><use href="#s-astro"/></svg>
+        <h2 id="listTitle">To-do list</h2>
+        <div class="seg" role="group" aria-label="Which list">
+          <button type="button" data-list="day" aria-pressed="true">Today</button>
+          <button type="button" data-list="week" aria-pressed="false">This week</button>
+          <button type="button" data-list="goals" aria-pressed="false">Future goals</button>
+        </div>
+        <p class="list-sub" id="listSub"></p>
+        <div class="progress" aria-hidden="true"><span id="listBar"></span></div>
+        <p class="hint" id="listCount" style="margin:0"></p>
+        <ul class="tasks" id="tasks"></ul>
+        <form class="add-row" id="taskForm" autocomplete="off">
+          <label for="taskText" class="sr-only">New item</label>
+          <input type="text" id="taskText" maxlength="140" placeholder="Add something">
+          <button type="submit" class="btn">Add</button>
+        </form>
+      </article>
+    </section>
+
+    <!-- DAYS -->
+    <section class="panel" id="panel-days" hidden aria-labelledby="monthLabel">
+      <article class="card">
+        <svg class="sticker card-sticker" viewBox="0 0 100 100" aria-hidden="true" style="width:58px;height:58px"><use href="#s-leaf"/></svg>
+        <div class="cal-head">
+          <button class="icon-btn" id="prevMonth" aria-label="Previous month">‹</button>
+          <h2 id="monthLabel"></h2>
+          <button class="icon-btn" id="nextMonth" aria-label="Next month">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </article>
+      <article class="card">
+        <h2>Recent days</h2>
+        <ul class="recent" id="recent"></ul>
+      </article>
+    </section>
+
+    <!-- CHEER -->
+    <section class="panel" id="panel-cheer" hidden aria-label="Encouragement">
+      <article class="card cheer-card">
+        <div class="cheer-stickers" aria-hidden="true">
+          <svg class="sticker" viewBox="0 0 120 124" style="left:50%;top:0;width:130px;height:134px;transform:translateX(-50%) rotate(-4deg)"><use href="#s-astro"/></svg>
+          <svg class="sticker" viewBox="0 0 120 90" style="left:2%;top:18px;width:84px;height:64px;transform:rotate(-12deg)"><use href="#s-planet"/></svg>
+          <svg class="sticker" viewBox="0 0 60 100" style="right:6%;top:40px;width:48px;height:80px;transform:rotate(14deg)"><use href="#s-tulip"/></svg>
+          <svg viewBox="0 0 50 50" class="twinkle" filter="url(#glow)" style="position:absolute;right:26%;top:4px;width:20px;height:20px"><use href="#s-star"/></svg>
+          <svg viewBox="0 0 50 50" class="twinkle" filter="url(#glow)" style="position:absolute;left:28%;top:112px;width:16px;height:16px;animation-delay:1.2s"><use href="#s-star"/></svg>
+        </div>
+        <p class="cheer-text" id="cheerText" aria-live="polite"></p>
+        <button class="btn pink" id="cheerBtn">Another one, please</button>
+      </article>
+    </section>
+  </main>
+</div>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-inner" role="tablist">
+    <button class="tab" role="tab" data-tab="journal" aria-selected="true"><svg aria-hidden="true"><use href="#i-book"/></svg>Journal</button>
+    <button class="tab" role="tab" data-tab="mood" aria-selected="false"><svg aria-hidden="true"><use href="#i-mood"/></svg>Mood</button>
+    <button class="tab" role="tab" data-tab="list" aria-selected="false"><svg aria-hidden="true"><use href="#i-check"/></svg>Checklist</button>
+    <button class="tab" role="tab" data-tab="days" aria-selected="false"><svg aria-hidden="true"><use href="#i-cal"/></svg>Days</button>
+    <button class="tab" role="tab" data-tab="cheer" aria-selected="false"><svg aria-hidden="true"><use href="#i-heart"/></svg>Cheer</button>
+  </div>
+</nav>
+
+<dialog id="settings" aria-labelledby="setTitle">
+  <div class="dlg">
+    <h2 id="setTitle">Settings</h2>
+    <div class="field">
+      <label for="nameInput">What should I call you?</label>
+      <input type="text" id="nameInput" placeholder="cutie" maxlength="30">
+    </div>
+    <div class="field">
+      <label class="switch" for="calToggle">
+        <span><strong>Calorie tracking</strong><br><span class="hint" style="margin:0">Turn off to keep just the food log and journal</span></span>
+        <input type="checkbox" id="calToggle" role="switch">
+      </label>
+    </div>
+    <div class="field backup">
+      <span class="lbl">Move to another device</span>
+      <p class="hint" style="margin:0 0 8px">Entries save on this device. To see them on your phone or laptop too, copy a backup code here and paste it there.</p>
+      <div class="dlg-actions" style="margin-bottom:8px">
+        <button type="button" class="btn soft" id="makeBackup">Copy backup code</button>
+      </div>
+      <label for="backupCode" class="sr-only">Backup code</label>
+      <textarea id="backupCode" placeholder="Paste a backup code here to restore"></textarea>
+      <div class="dlg-actions" style="margin-top:8px">
+        <button type="button" class="btn pink" id="restoreBtn">Restore from code</button>
+      </div>
+    </div>
+    <div class="dlg-actions" style="justify-content:flex-end">
+      <button type="button" class="btn" id="closeSettings">Done</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const KEY = 'buttercup-journal-v1';
+
+  /* ---------- storage ---------- */
+  const blank = () => ({ settings:{ name:'', calOn:true, defaultGoal:1400 }, days:{}, lists:{ day:{}, week:{}, goals:[] } });
+  const fixLists = l => { l = (l && typeof l==='object') ? l : {}; return { day:(l.day&&typeof l.day==='object')?l.day:{}, week:(l.week&&typeof l.week==='object')?l.week:{}, goals:Array.isArray(l.goals)?l.goals:[] }; };
+  function load(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(raw){ const p = JSON.parse(raw); const b = blank();
+        return { settings:Object.assign(b.settings, p.settings||{}), days:(p.days && typeof p.days==='object')?p.days:{}, lists:fixLists(p.lists) }; }
+    }catch(e){}
+    return blank();
+  }
+  let state = load();
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+  /* ---------- dates ---------- */
+  const pad = n => String(n).padStart(2,'0');
+  const iso = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); };
+  const today = () => iso(new Date());
+  const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
+  const shortDate = s => parse(s).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+
+  let cur = today(), tab = 'journal', calMonth = null;
+
+  const newDay = () => ({ journal:'', meals:[], goal:null, mood:null, thoughts:'' });
+  const getDay = k => state.days[k] || newDay();
+  const ensureDay = k => (state.days[k] ||= newDay());
+  const hasContent = d => d && (d.journal || (d.meals&&d.meals.length) || d.mood || d.thoughts);
+  function prune(k){ const d = state.days[k]; if(d && !hasContent(d) && !d.goal) delete state.days[k]; }
+
+  /* ---------- messages ---------- */
+  const MSGS = [
+    "You got this. Seriously, you do.",
+    "You're a baddie. Act accordingly.",
+    "El Salvadoran cutie, reporting for greatness.",
+    "Vos podés, bonita.",
+    "Proud of you for showing up today.",
+    "Eating is self-care, not a reward.",
+    "Sweeter than a fresh pupusa.",
+    "Even astronauts need fuel to reach the stars.",
+    "Drink some water, pretty girl.",
+    "One day at a time. One bite at a time.",
+    "Your feelings are allowed here. All of them.",
+    "You deserve good food and good days.",
+    "Main character energy, always.",
+    "Soft heart, strong girl.",
+    "The universe is lucky to have you in it.",
+    "Rest is productive too.",
+    "Look at you, taking care of yourself.",
+    "Bad days don't cancel out how amazing you are.",
+    "You're doing better than you think.",
+    "Cozy up, you earned it.",
+    "Someone out there thinks you're the whole galaxy.",
+    "Tulip-level pretty, pumpkin-spice level warm.",
+    "Keep going, cutie. The best part's coming.",
+    "Chin up, crown on.",
+    "Nourish the body that carries that big heart.",
+    "You're not too much. You're just right.",
+    "Put on your favorite song and breathe.",
+    "Hermosa inside and out.",
+    "Little steps still count as moving forward.",
+    "You make hard things look cute.",
+    "Fuel up, baddie. You've got places to be."
+  ];
+  const hash = s => { let h = 7; for(const c of s) h = (h*31 + c.charCodeAt(0)) >>> 0; return h; };
+  const dailyMsg = k => MSGS[hash(k) % MSGS.length];
+
+  /* ---------- toast ---------- */
+  let toastT;
+  function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove('show'), 2200); }
+
+  /* ---------- header ---------- */
+  function renderHeader(){
+    const nm = (state.settings.name||'').trim() || 'cutie';
+    $('#hello').textContent = 'Hi, ' + nm;
+    $('#dailyCheer').textContent = dailyMsg(cur);
+    $('#dateLabel').textContent = (cur===today() ? 'Today, ' : '') + parse(cur).toLocaleDateString(undefined,{weekday:cur===today()?undefined:'long',month:'long',day:'numeric'});
+    $('#todayBtn').hidden = cur === today();
+  }
+
+  /* ---------- journal & food ---------- */
+  function renderJournal(){
+    const d = getDay(cur);
+    const ta = $('#journal');
+    if(document.activeElement !== ta) ta.value = d.journal || '';
+    $('#journalTitle').textContent = cur===today() ? 'How was today?' : 'Your day on ' + shortDate(cur);
+    $('#journalSaved').textContent = '';
+    renderFood();
+  }
+
+  const C = 2*Math.PI*50;
+  function renderFood(){
+    const d = getDay(cur), on = state.settings.calOn;
+    document.body.classList.toggle('cal-off', !on);
+    const goal = Math.max(1300, d.goal || state.settings.defaultGoal || 1400);
+    const total = d.meals.reduce((a,m)=>a+(Number(m.cal)||0),0);
+    $$('.chip').forEach(b=>b.setAttribute('aria-pressed', String(Number(b.dataset.goal)===goal)));
+    const pct = Math.min(total/goal,1);
+    $('#ringFill').setAttribute('stroke-dashoffset', String(C*(1-pct)));
+    $('#calTotal').textContent = total;
+    $('#calGoalTxt').textContent = 'of ' + goal;
+    $('#calMsg').textContent =
+      total===0 ? "Log a meal and I'll keep count for you." :
+      pct < .5 ? "Good start. Keep fueling that beautiful brain." :
+      pct < 1 ? (goal-total) + " to go. Almost there, cutie." :
+      "Goal reached. So proud of you!";
+
+    const ul = $('#meals'); ul.innerHTML = '';
+    if(!d.meals.length){
+      const li = document.createElement('li'); li.className='empty';
+      li.textContent = cur===today() ? 'Nothing logged yet. Add your first meal below.' : 'No meals logged this day.';
+      ul.appendChild(li); return;
+    }
+    const order = {Breakfast:0,Lunch:1,Dinner:2,Snack:3};
+    [...d.meals].sort((a,b)=>(order[a.type]??9)-(order[b.type]??9)).forEach(m=>{
+      const li = document.createElement('li'); li.className='meal';
+      const tag = document.createElement('span'); tag.className='tag '+m.type; tag.textContent=m.type;
+      const tx = document.createElement('span'); tx.className='meal-text'; tx.textContent=m.text;
+      li.append(tag, tx);
+      if(on && m.cal!=null){ const c=document.createElement('span'); c.className='meal-cal'; c.textContent=m.cal+' cal'; li.append(c); }
+      const del = document.createElement('button'); del.className='del'; del.type='button'; del.textContent='×';
+      del.setAttribute('aria-label','Remove '+m.text);
+      del.onclick = () => { const dd = ensureDay(cur); dd.meals = dd.meals.filter(x=>x.id!==m.id); prune(cur); save(); renderFood(); toast('Meal removed'); };
+      li.append(del); ul.appendChild(li);
+    });
+  }
+
+  let jT;
+  $('#journal').addEventListener('input', e=>{
+    const v = e.target.value; clearTimeout(jT);
+    $('#journalSaved').textContent = 'Saving…';
+    jT = setTimeout(()=>{ ensureDay(cur).journal = v; prune(cur); save(); $('#journalSaved').textContent = 'Saved'; }, 450);
+  });
+
+  $$('.chip').forEach(b=>b.addEventListener('click',()=>{
+    const g = Number(b.dataset.goal); ensureDay(cur).goal = g; state.settings.defaultGoal = g; save(); renderFood();
+  }));
+
+  function defaultMealType(){
+    const h = new Date().getHours();
+    return h < 11 ? 'Breakfast' : h < 16 ? 'Lunch' : h < 21 ? 'Dinner' : 'Snack';
+  }
+
+  /* ---------- calorie best guess (built in) ---------- */
+  const FOODS = [
+    ['pupusa revuelta',320],['pupusa',300],['tamal',280],['platano frito',250],['platano',230],['platanos',230],['yuca frita',350],['yuca',330],
+    ['curtido',30],['pan dulce',350],['concha',350],['horchata',200],['atol',180],['empanada',300],['casamiento',350],
+    ['breakfast burrito',550],['burrito bowl',700],['burrito',700],['taco',180],['quesadilla',500],['nachos',550],['enchilada',300],
+    ['refried beans',230],['beans',230],['frijoles',230],['rice',200],['arroz',200],['tortilla',70],
+    ['scrambled eggs',180],['egg',75],['huevo',75],['bacon',45],['sausage',180],['toast',90],['bread',80],['bagel',280],
+    ['cereal',200],['oatmeal',160],['avena',160],['pancake',90],['waffle',220],['french toast',300],['yogurt',150],['granola',200],
+    ['banana',105],['apple',95],['orange',60],['strawberries',50],['strawberry',5],['berries',70],['grapes',100],['mango',100],['watermelon',85],['avocado',240],['fruit',80],
+    ['caesar salad',350],['salad',150],['grilled chicken',230],['chicken breast',230],['fried chicken',400],['chicken tenders',400],['nuggets',250],['wings',450],['chicken',250],
+    ['cheeseburger',600],['burger',550],['hot dog',300],['fries',350],['pizza',285],['mac and cheese',400],['spaghetti',450],['pasta',400],['lasagna',450],
+    ['sandwich',400],['sub',500],['wrap',450],['sushi',300],['ramen',450],['cup noodles',300],['noodles',380],['fried rice',450],['orange chicken',450],['soup',200],['chili',300],
+    ['steak',500],['salmon',350],['fish',250],['shrimp',150],['pork',300],['carne asada',350],['potato',160],['sweet potato',110],['mashed potatoes',240],['vegetables',60],['veggies',60],['broccoli',50],['corn',90],
+    ['chips',160],['hot cheetos',160],['cheetos',160],['takis',150],['popcorn',100],['crackers',130],['pretzels',110],['hummus',70],['cheese',110],['peanut butter',190],['almonds',165],['nuts',170],
+    ['maria cookie',25],['galleta maria',25],['cookie',150],['brownie',230],['cake',350],['cupcake',250],['ice cream',270],['donut',250],['muffin',380],['croissant',230],['chocolate',210],['candy',150],['gummies',140],
+    ['granola bar',190],['protein bar',200],['protein shake',160],['smoothie',250],['milk',120],['latte',190],['frappuccino',380],['iced coffee',120],['coffee',5],['boba',350],['bubble tea',350],['matcha',180],
+    ['juice',110],['soda',150],['coke',140],['lemonade',120],['tea',2],['water',0]
+  ].map(([k,v])=>[norm(k),v]).sort((a,b)=>b[0].length-a[0].length);
+  function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/['’]/g,''); }
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const RX = FOODS.map(([k,v])=>[new RegExp('\\b'+esc(k)+'(e?s)?\\b'),k,v]);
+  const NUMW = {a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,half:.5,un:1,una:1,dos:2,tres:3};
+  function guess(text){
+    const parts = norm(text).split(/,|\band\b|\bwith\b|\by\b|\bcon\b|\+|&|;|\n/).map(s=>s.trim()).filter(Boolean);
+    let total = 0; const found = [];
+    for(const p of parts){
+      let q = 1; const m = p.match(/^(\d+(?:\.\d+)?|a|an|one|two|three|four|five|six|half|un|una|dos|tres)\b/);
+      if(m) q = isNaN(m[1]) ? NUMW[m[1]] : parseFloat(m[1]);
+      const hit = RX.find(([rx])=>rx.test(p));
+      if(hit){ total += hit[2]*q; found.push(hit[1] + (q!==1 ? ' ×'+q : '')); }
+    }
+    if(!found.length) return null;
+    return { cal: Math.round(total/5)*5, found };
+  }
+
+  $('#guessBtn').addEventListener('click', ()=>{
+    const t = $('#mealText').value.trim();
+    if(!t){ $('#guessNote').textContent = 'Type what you ate first, then tap Best guess.'; $('#mealText').focus(); return; }
+    const g = guess(t);
+    if(!g){ $('#guessNote').textContent = "Couldn't match that one. Pop in your own number."; return; }
+    $('#mealCal').value = g.cal;
+    $('#guessNote').textContent = 'Best guess: about ' + g.cal + ' cal (' + g.found.join(', ') + ')';
+  });
+
+  $('#mealForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    const text = $('#mealText').value.trim();
+    if(!text){ $('#mealText').focus(); return; }
+    let calRaw = $('#mealCal').value, cal = calRaw==='' ? null : Math.max(0, Math.round(Number(calRaw)));
+    let msg = 'Meal added';
+    if(cal===null && state.settings.calOn){ const g = guess(text); if(g){ cal = g.cal; msg = 'Added with a best guess of ' + g.cal + ' cal'; } }
+    ensureDay(cur).meals.push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), type:$('#mealType').value, text, cal });
+    save();
+    $('#mealText').value=''; $('#mealCal').value=''; $('#guessNote').textContent='';
+    renderFood(); toast(msg);
+  });
+
+  /* ---------- mood ---------- */
+  const FACE = { super:'#f-super', happy:'#f-happy', mid:'#f-mid', sad:'#f-sad' };
+  const FACE_LABEL = { super:'So happy', happy:'Happy', mid:'Mid', sad:'Sad' };
+  const faceSvg = (m, size) => '<svg viewBox="0 0 100 100" width="'+size+'" height="'+size+'" aria-hidden="true"><use href="'+FACE[m]+'"/></svg>';
+
+  function renderMood(){
+    const d = getDay(cur);
+    $$('.face-btn').forEach(b=>b.setAttribute('aria-pressed', String(d.mood===b.dataset.mood)));
+    const ta = $('#thoughts'); if(document.activeElement!==ta) ta.value = d.thoughts || '';
+    $('#thoughtsSaved').textContent = '';
+    $('#moodTitle').textContent = cur===today() ? "How's your heart today?" : 'How you felt on ' + shortDate(cur);
+    const wk = $('#week'); wk.innerHTML = '';
+    for(let i=6;i>=0;i--){
+      const k = addDays(cur,-i), dd = state.days[k];
+      const b = document.createElement('button'); b.type='button';
+      if(k===cur) b.classList.add('sel');
+      const lbl = parse(k).toLocaleDateString(undefined,{weekday:'short'});
+      b.innerHTML = (dd && dd.mood ? faceSvg(dd.mood,30) : '<span class="dot-empty"></span>') + '<span></span>';
+      b.lastChild.textContent = lbl;
+      b.setAttribute('aria-label', shortDate(k) + (dd&&dd.mood ? ', ' + FACE_LABEL[dd.mood] : ', no mood yet'));
+      b.onclick = () => setDate(k);
+      wk.appendChild(b);
+    }
+  }
+  $$('.face-btn').forEach(b=>b.addEventListener('click',()=>{
+    const d = ensureDay(cur), m = b.dataset.mood;
+    d.mood = d.mood===m ? null : m; prune(cur); save(); renderMood();
+    if(d.mood==='sad') toast("Sending you the biggest hug");
+    else if(d.mood==='super') toast("Love that for you!");
+    else if(d.mood) toast('Saved');
+  }));
+  let tT;
+  $('#thoughts').addEventListener('input', e=>{
+    const v = e.target.value; clearTimeout(tT); $('#thoughtsSaved').textContent='Saving…';
+    tT = setTimeout(()=>{ ensureDay(cur).thoughts = v; prune(cur); save(); $('#thoughtsSaved').textContent='Saved'; }, 450);
+  });
+
+  /* ---------- days ---------- */
+  function renderDays(){
+    const base = calMonth || (()=>{ const d=parse(cur); return new Date(d.getFullYear(), d.getMonth(), 1); })();
+    calMonth = base;
+    $('#monthLabel').textContent = base.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+    const g = $('#calGrid'); g.innerHTML = '';
+    const dows = []; for(let i=0;i<7;i++){ dows.push(new Date(2024,0,7+i).toLocaleDateString(undefined,{weekday:'narrow'})); }
+    dows.forEach(x=>{ const s=document.createElement('div'); s.className='dow'; s.textContent=x; s.setAttribute('aria-hidden','true'); g.appendChild(s); });
+    for(let i=0;i<base.getDay();i++) g.appendChild(document.createElement('div'));
+    const dim = new Date(base.getFullYear(), base.getMonth()+1, 0).getDate(), tk = today();
+    for(let n=1;n<=dim;n++){
+      const k = iso(new Date(base.getFullYear(), base.getMonth(), n)), d = state.days[k];
+      const b = document.createElement('button'); b.type='button'; b.className='cal-day';
+      if(k===tk) b.classList.add('is-today'); if(k===cur) b.classList.add('is-sel');
+      b.innerHTML = '<span>'+n+'</span>' + (d&&d.mood ? faceSvg(d.mood,22) : (hasContent(d) ? '<span class="pip"></span>' : ''));
+      b.setAttribute('aria-label', parse(k).toLocaleDateString(undefined,{month:'long',day:'numeric'}) + (d&&d.mood ? ', ' + FACE_LABEL[d.mood] : '') + (hasContent(d) ? ', has entries' : ''));
+      b.onclick = () => { setDate(k); setTab('journal'); };
+      g.appendChild(b);
+    }
+    const ul = $('#recent'); ul.innerHTML = '';
+    const keys = Object.keys(state.days).filter(k=>hasContent(state.days[k])).sort().reverse().slice(0,12);
+    if(!keys.length){ const li=document.createElement('li'); li.className='empty'; li.textContent='Your days will show up here once you write or log something.'; ul.appendChild(li); return; }
+    keys.forEach(k=>{
+      const d = state.days[k], li = document.createElement('li'), b = document.createElement('button'); b.type='button';
+      const snip = d.journal || d.thoughts || (d.meals||[]).map(m=>m.text).join(', ');
+      b.innerHTML = (d.mood ? faceSvg(d.mood,34) : '<svg viewBox="0 0 60 100" width="34" height="34" aria-hidden="true"><use href="#s-tulip"/></svg>') + '<span><span class="when"></span><span class="snip"></span></span>';
+      b.querySelector('.when').textContent = k===today() ? 'Today' : shortDate(k);
+      b.querySelector('.snip').textContent = snip;
+      b.onclick = () => { setDate(k); setTab('journal'); };
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+  $('#prevMonth').onclick = () => { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()-1, 1); renderDays(); };
+  $('#nextMonth').onclick = () => { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+1, 1); renderDays(); };
+
+  /* ---------- checklist ---------- */
+  let listKind = 'day';
+  const weekStart = k => { const d = parse(k); d.setDate(d.getDate() - d.getDay()); return iso(d); };
+  function listRef(create){
+    const L = state.lists;
+    if(listKind==='goals') return L.goals;
+    const bucket = listKind==='day' ? L.day : L.week, key = listKind==='day' ? cur : weekStart(cur);
+    if(!bucket[key] && create) bucket[key] = [];
+    return bucket[key] || [];
+  }
+  function pruneList(){
+    if(listKind==='goals') return;
+    const bucket = listKind==='day' ? state.lists.day : state.lists.week, key = listKind==='day' ? cur : weekStart(cur);
+    if(bucket[key] && !bucket[key].length) delete bucket[key];
+  }
+  function renderList(){
+    $$('.seg button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.list===listKind)));
+    const ws = parse(weekStart(cur)), we = parse(addDays(weekStart(cur),6));
+    const fmt = d => d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+    $('#listSub').textContent = listKind==='day' ? (cur===today() ? 'Things to get done today' : 'For ' + shortDate(cur))
+      : listKind==='week' ? 'Week of ' + fmt(ws) + ' to ' + fmt(we) : 'Dreams, plans, and big things coming';
+    $('#taskText').placeholder = listKind==='goals' ? 'Add a goal' : listKind==='week' ? 'Add something for this week' : 'Add something for today';
+    const items = listRef(false), done = items.filter(i=>i.done).length;
+    $('#listBar').style.width = items.length ? (done/items.length*100) + '%' : '0%';
+    $('#listCount').textContent = !items.length ? '' : done===items.length ? 'All done! Look at you go.' : done + ' of ' + items.length + ' done';
+    const ul = $('#tasks'); ul.innerHTML = '';
+    if(!items.length){
+      const li = document.createElement('li'); li.className='empty';
+      li.textContent = listKind==='goals' ? 'No goals yet. What do you want to make happen?' : 'Nothing here yet. Add your first item below.';
+      ul.appendChild(li); return;
+    }
+    items.forEach(it=>{
+      const li = document.createElement('li'); li.className='task';
+      const lab = document.createElement('label'), cb = document.createElement('input'), sp = document.createElement('span');
+      cb.type='checkbox'; cb.checked=!!it.done; sp.textContent=it.text;
+      cb.onchange = () => {
+        it.done = cb.checked; save(); renderList();
+        if(cb.checked){ const all = listRef(false); toast(all.every(x=>x.done) ? 'Everything checked off. Proud of you!' : listKind==='goals' ? 'Goal reached! Huge.' : 'Done! Nice work'); }
+      };
+      lab.append(cb, sp);
+      const del = document.createElement('button'); del.type='button'; del.className='del'; del.textContent='×'; del.setAttribute('aria-label','Remove '+it.text);
+      del.onclick = () => { const arr = listRef(false), i = arr.indexOf(it); if(i>-1) arr.splice(i,1); pruneList(); save(); renderList(); };
+      li.append(lab, del); ul.appendChild(li);
+    });
+  }
+  $$('.seg button').forEach(b=>b.addEventListener('click',()=>{ listKind = b.dataset.list; renderList(); }));
+  $('#taskForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    const t = $('#taskText').value.trim(); if(!t){ $('#taskText').focus(); return; }
+    listRef(true).push({ id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), text:t, done:false });
+    save(); $('#taskText').value=''; renderList(); $('#taskText').focus();
+  });
+
+  /* ---------- cheer ---------- */
+  let cheerIdx = null;
+  function renderCheer(){ if(cheerIdx===null) cheerIdx = hash(cur+'c') % MSGS.length; $('#cheerText').textContent = MSGS[cheerIdx]; }
+  $('#cheerBtn').addEventListener('click', ()=>{
+    let n; do{ n = Math.floor(Math.random()*MSGS.length); }while(n===cheerIdx && MSGS.length>1);
+    cheerIdx = n; const el = $('#cheerText'); el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); renderCheer();
+  });
+
+  /* ---------- nav ---------- */
+  function flushEditors(){
+    clearTimeout(jT); clearTimeout(tT);
+    const j = $('#journal').value, t = $('#thoughts').value;
+    if(!$('#panel-journal').hidden && j !== (getDay(cur).journal||'')){ ensureDay(cur).journal = j; prune(cur); }
+    if(!$('#panel-mood').hidden && t !== (getDay(cur).thoughts||'')){ ensureDay(cur).thoughts = t; prune(cur); }
+    save();
+  }
+  function setDate(k){ flushEditors(); cur = k; cheerIdx = null; const d=parse(k); calMonth = new Date(d.getFullYear(), d.getMonth(), 1); render(); }
+  function setTab(t){
+    flushEditors(); tab = t;
+    $$('.tab').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===t)));
+    $$('.panel').forEach(p=>p.hidden = p.id !== 'panel-'+t);
+    render(); window.scrollTo({top:0});
+  }
+  function render(){
+    renderHeader();
+    if(tab==='journal') renderJournal();
+    if(tab==='mood') renderMood();
+    if(tab==='days') renderDays();
+    if(tab==='cheer') renderCheer();
+    if(tab==='list') renderList();
+  }
+  $$('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+  $('#prevDay').onclick = () => setDate(addDays(cur,-1));
+  $('#nextDay').onclick = () => setDate(addDays(cur,1));
+  $('#todayBtn').onclick = () => setDate(today());
+  $('#dateLabel').onclick = () => setTab('days');
+
+  /* ---------- settings ---------- */
+  const dlg = $('#settings');
+  let restoreArmed = false;
+  $('#settingsBtn').onclick = () => {
+    $('#nameInput').value = state.settings.name || '';
+    $('#calToggle').checked = !!state.settings.calOn;
+    $('#backupCode').value = ''; restoreArmed = false; $('#restoreBtn').textContent = 'Restore from code';
+    if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+  };
+  const closeDlg = () => { if(dlg.close) dlg.close(); else dlg.removeAttribute('open'); };
+  $('#closeSettings').onclick = closeDlg;
+  $('#nameInput').addEventListener('input', e=>{ state.settings.name = e.target.value; save(); renderHeader(); });
+  $('#calToggle').addEventListener('change', e=>{ state.settings.calOn = e.target.checked; save(); render(); toast(e.target.checked ? 'Calorie tracking on' : 'Calorie tracking off'); });
+  $('#makeBackup').onclick = () => {
+    flushEditors();
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    const ta = $('#backupCode'); ta.value = code; ta.focus(); ta.select();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(()=>toast('Backup code copied'), ()=>toast('Code is selected. Copy it and paste it on your other device'));
+    } else toast('Code is selected. Copy it and paste it on your other device');
+  };
+  $('#restoreBtn').onclick = () => {
+    const raw = $('#backupCode').value.trim();
+    if(!raw){ toast('Paste a backup code first'); return; }
+    let p;
+    try{ p = JSON.parse(decodeURIComponent(escape(atob(raw)))); if(!p || typeof p.days !== 'object') throw 0; }
+    catch(e){ toast("That code didn't work. Copy the whole code and try again"); return; }
+    if(!restoreArmed){ restoreArmed = true; $('#restoreBtn').textContent = 'Tap again to replace entries on this device'; return; }
+    const b = blank();
+    state = { settings:Object.assign(b.settings, p.settings||{}), days:p.days, lists:fixLists(p.lists) };
+    save(); restoreArmed = false; $('#restoreBtn').textContent = 'Restore from code';
+    closeDlg(); render(); toast('Restored your entries');
+  };
+
+  /* ---------- falling leaves ---------- */
+  (function(){
+    const box = $('#leaves'), kinds = ['#s-leaf','#s-leaf-y','#s-leaf','#s-acorn','#s-leaf-y','#s-tulip'];
+    kinds.forEach((k,i)=>{
+      const s = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      s.setAttribute('viewBox', k==='#s-tulip' ? '0 0 60 100' : k==='#s-acorn' ? '0 0 80 100' : '0 0 100 100');
+      s.style.left = (8 + i*15 + Math.random()*6) + '%';
+      s.style.animationDuration = (16 + Math.random()*10) + 's';
+      s.style.animationDelay = (-Math.random()*20) + 's';
+      const u = document.createElementNS('http://www.w3.org/2000/svg','use'); u.setAttribute('href',k);
+      s.appendChild(u); box.appendChild(s);
+    });
+  })();
+
+  window.addEventListener('pagehide', flushEditors);
+  document.addEventListener('visibilitychange', ()=>{ if(document.hidden) flushEditors(); });
+
+  $('#mealType').value = defaultMealType();
+  render();
+})();
+</script>
+</body>
+</html>
